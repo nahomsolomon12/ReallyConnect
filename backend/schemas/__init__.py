@@ -8,6 +8,12 @@ from schemas.request import (
     MentorshipRequestListResponse
 )
 from schemas.ai import RequestRewriteRequest, RequestRewriteResponse
+from schemas.message import (
+    MessageCreate,
+    MessageResponse,
+    MessageThreadResponse,
+    ConnectionPartner,
+)
 
 __all__ = [
     # User schemas
@@ -28,5 +34,10 @@ __all__ = [
     # AI schemas
     "RequestRewriteRequest",
     "RequestRewriteResponse",
+    # Message schemas
+    "MessageCreate",
+    "MessageResponse",
+    "MessageThreadResponse",
+    "ConnectionPartner",
 ]
 

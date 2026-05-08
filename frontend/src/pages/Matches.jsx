@@ -151,29 +151,33 @@ const Matches = () => {
         </p>
       ) : (
         <div className="match-list">
-          {acceptedRequests.map((request) => (
-            <a
-              key={request.id}
-              className="match-message"
-              href="/app/matches/messages"
-              style={{ textDecoration: "none", color: "inherit" }}
-            >
-              <div className="match-item">
-                <div style={{ width: "50px", height: "50px", borderRadius: "50%", backgroundColor: "#ddd" }} />
-                <div>
-                  <h4>
-                    {userProfile?.role === "mentor"
-                      ? request.mentee_name || "Mentee"
-                      : request.mentor_name || "Mentor"}
-                  </h4>
-                  <p>Tap to message</p>
-                  <p style={{ fontSize: "0.8rem", color: "#666" }}>
-                    {request.help_type.replace('_', ' ')}
-                  </p>
+          {acceptedRequests.map((request) => {
+            const partnerId =
+              userProfile?.role === "mentor" ? request.mentee_id : request.mentor_id;
+            return (
+              <a
+                key={request.id}
+                className="match-message"
+                href={`/app/matches/messages/${partnerId}`}
+                style={{ textDecoration: "none", color: "inherit" }}
+              >
+                <div className="match-item">
+                  <div style={{ width: "50px", height: "50px", borderRadius: "50%", backgroundColor: "#ddd" }} />
+                  <div>
+                    <h4>
+                      {userProfile?.role === "mentor"
+                        ? request.mentee_name || "Mentee"
+                        : request.mentor_name || "Mentor"}
+                    </h4>
+                    <p>Tap to message</p>
+                    <p style={{ fontSize: "0.8rem", color: "#666" }}>
+                      {request.help_type.replace('_', ' ')}
+                    </p>
+                  </div>
                 </div>
-              </div>
-            </a>
-          ))}
+              </a>
+            );
+          })}
         </div>
       )}
 

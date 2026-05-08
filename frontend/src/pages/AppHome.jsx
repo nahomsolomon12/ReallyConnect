@@ -123,8 +123,8 @@ const AppHome = () => {
     <div className="app-home-page">
       <ProfileCard
         key={currentMentor.id}
-        name={currentMentor.full_name}
-        bio={`${currentMentor.job_title} • ${currentMentor.industry}`}
+        name={currentMentor.full_name || currentMentor.job_title || "Mentor"}
+        bio={[currentMentor.job_title, currentMentor.industry].filter(Boolean).join(" • ")}
         image={currentMentor.profile_picture_url}
         interests={currentMentor.interests?.map(i => i.name).join(", ")}
         helpTypes={currentMentor.help_types_offered?.join(", ")}
@@ -144,7 +144,7 @@ const AppHome = () => {
         onClick={handleLike}
         disabled={creating}
       >
-        {creating ? "..." : "&#10004;"}
+        {creating ? "..." : "✔"}
       </button>
 
       <p style={{ textAlign: "center", marginTop: "1rem", fontSize: "0.9rem" }}>

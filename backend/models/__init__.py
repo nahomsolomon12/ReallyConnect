@@ -6,6 +6,7 @@ from models.mentor import MentorProfile
 from models.mentee import MenteeProfile
 from models.request import MentorshipRequest
 from models.connection import Connection
+from models.message import Message
 
 __all__ = [
     "HelpType",
@@ -16,5 +17,6 @@ __all__ = [
     "MenteeProfile",
     "MentorshipRequest",
     "Connection",
+    "Message",
 ]
 

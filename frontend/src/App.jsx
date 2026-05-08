@@ -76,7 +76,7 @@ function App() {
             }
           />
           <Route
-            path="/app/matches/messages"
+            path="/app/matches/messages/:userId"
             element={
               <ProtectedRoute requireProfile={true}>
                 <Messages />
