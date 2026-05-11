@@ -1,14 +1,18 @@
 import { useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { useAuth } from "../contexts/AuthContext";
+import { useToast } from "../contexts/ToastContext";
 import { userAPI, mentorAPI, menteeAPI } from "../lib/api";
+import { usePageTitle } from "../lib/usePageTitle";
 import ImageUpload from "../components/ImageUpload";
 import MobileNav from "../components/MobileNav";
 import "../App.css";
 
 const Profile = () => {
+  usePageTitle("Profile");
   const navigate = useNavigate();
   const { user, userProfile, signOut, refreshProfile } = useAuth();
+  const toast = useToast();
   const [profile, setProfile] = useState({
     full_name: "",
     role: "",
@@ -60,7 +64,7 @@ const Profile = () => {
       await signOut();
       navigate("/");
     } catch (err) {
-      alert("Error signing out: " + err.message);
+      toast.error("Error signing out: " + err.message);
     }
   };
 
@@ -79,10 +83,12 @@ const Profile = () => {
       await refreshProfile();
 
       setEditMode(false);
-      alert("Profile updated successfully!");
+      toast.success("Profile updated");
     } catch (err) {
       console.error("Error updating profile:", err);
-      setError(err.message || "Failed to update profile");
+      const msg = err.message || "Failed to update profile";
+      setError(msg);
+      toast.error(msg);
     } finally {
       setSaving(false);
     }
@@ -132,10 +138,12 @@ const Profile = () => {
                       }
                       setProfilePictureUrl(url);
                       setEditProfilePicture(false);
-                      alert("Profile picture updated successfully!");
+                      toast.success("Profile picture updated");
                     } catch (err) {
                       console.error("Error updating profile:", err);
-                      setError(err.message || "Failed to update profile picture");
+                      const msg = err.message || "Failed to update profile picture";
+                      setError(msg);
+                      toast.error(msg);
                     } finally {
                       setSaving(false);
                     }

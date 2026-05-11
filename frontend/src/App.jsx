@@ -1,6 +1,8 @@
 import "./App.css";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { AuthProvider } from "./contexts/AuthContext";
+import { ToastProvider } from "./contexts/ToastContext";
+import ErrorBoundary from "./components/ErrorBoundary";
 import { ProtectedRoute, PublicRoute } from "./components/ProtectedRoute";
 
 import Landing from "./pages/Landing";
@@ -18,9 +20,11 @@ import Profile from "./pages/Profile";
 
 function App() {
   return (
-    <AuthProvider>
-      <BrowserRouter>
-        <Routes>
+    <ErrorBoundary>
+      <ToastProvider>
+        <AuthProvider>
+          <BrowserRouter>
+            <Routes>
           {/* Public */}
           <Route path="/" element={<Landing />} />
           <Route
@@ -91,9 +95,11 @@ function App() {
               </ProtectedRoute>
             }
           />
-        </Routes>
-      </BrowserRouter>
-    </AuthProvider>
+            </Routes>
+          </BrowserRouter>
+        </AuthProvider>
+      </ToastProvider>
+    </ErrorBoundary>
   );
 }
 

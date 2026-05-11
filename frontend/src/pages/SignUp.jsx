@@ -2,7 +2,9 @@ import { useState, useEffect } from "react";
 import Breadcrumb from "../components/BreadCrumb";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
+import { useToast } from "../contexts/ToastContext";
 import { userAPI, mentorAPI, menteeAPI } from "../lib/api";
+import { usePageTitle } from "../lib/usePageTitle";
 
 import Card from "../components/Card";
 import mentorImg from "../assets/mentor.webp";
@@ -11,8 +13,10 @@ import menteeImg from "../assets/mentee.jpg";
 import "../App.css";
 
 const SignUp = () => {
+  usePageTitle("Choose your role");
   const navigate = useNavigate();
   const { user, userProfile, refreshProfile, signOut } = useAuth();
+  const toast = useToast();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
@@ -80,7 +84,9 @@ const SignUp = () => {
       }
     } catch (err) {
       console.error("Error setting role:", err);
-      setError(err.message || "Failed to set role. Please try again.");
+      const msg = err.message || "Failed to set role. Please try again.";
+      setError(msg);
+      toast.error(msg);
       setLoading(false);
     }
   };

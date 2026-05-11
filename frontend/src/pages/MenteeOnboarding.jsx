@@ -3,14 +3,21 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { menteeAPI, interestsAPI } from "../lib/api";
 import { useAuth } from "../contexts/AuthContext";
+import { useToast } from "../contexts/ToastContext";
+import { usePageTitle } from "../lib/usePageTitle";
 import ImageUpload from "../components/ImageUpload";
 import "../App.css";
 
 import logo from "../assets/logo.png";
 
+const TEXT_MIN = 15;
+const TEXT_MAX = 600;
+
 const MenteeOnboarding = () => {
+  usePageTitle("Mentee onboarding");
   const navigate = useNavigate();
   const { refreshProfile } = useAuth();
+  const toast = useToast();
   const [availableInterests, setAvailableInterests] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -74,21 +81,58 @@ const MenteeOnboarding = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setLoading(true);
     setError(null);
 
+    const industry = formData.industry.trim();
+    const goals = formData.goals.trim();
+    const background = formData.background.trim();
+
+    if (!industry) {
+      setError("Please choose an industry.");
+      return;
+    }
+    if (goals.length < TEXT_MIN) {
+      setError(`Tell us a bit more about your goals (at least ${TEXT_MIN} characters).`);
+      return;
+    }
+    if (goals.length > TEXT_MAX) {
+      setError(`Goals are too long (max ${TEXT_MAX} characters).`);
+      return;
+    }
+    if (background.length < TEXT_MIN) {
+      setError(`Tell us a bit more about your background (at least ${TEXT_MIN} characters).`);
+      return;
+    }
+    if (background.length > TEXT_MAX) {
+      setError(`Background is too long (max ${TEXT_MAX} characters).`);
+      return;
+    }
+    if (formData.help_needed.length === 0) {
+      setError("Select at least one type of help you're looking for.");
+      return;
+    }
+    if (formData.interest_ids.length < 3) {
+      setError("Select at least 3 interests so we can match you well.");
+      return;
+    }
+
+    setLoading(true);
     try {
-      // Create mentee profile in backend
-      await menteeAPI.createMe(formData);
+      await menteeAPI.createMe({
+        ...formData,
+        industry,
+        goals,
+        background,
+      });
 
-      // Refresh profile in auth context
       await refreshProfile();
-
-      // Navigate to app home
+      toast.success("Mentee profile created");
       navigate("/app/home");
     } catch (err) {
       console.error("Error creating mentee profile:", err);
-      setError(err.message || "Failed to create mentee profile");
+      const msg = err.message || "Failed to create mentee profile";
+      setError(msg);
+      toast.error(msg);
       setLoading(false);
     }
   };

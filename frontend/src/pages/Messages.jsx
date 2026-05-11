@@ -1,7 +1,9 @@
 import { useEffect, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
+import { useToast } from "../contexts/ToastContext";
 import { messagesAPI } from "../lib/api";
+import { usePageTitle } from "../lib/usePageTitle";
 import MobileNav from "../components/MobileNav";
 import "../App.css";
 
@@ -11,6 +13,7 @@ const Messages = () => {
   const navigation = useNavigate();
   const { userId } = useParams();
   const { user } = useAuth();
+  const toast = useToast();
 
   const [partner, setPartner] = useState(null);
   const [messages, setMessages] = useState([]);
@@ -70,13 +73,16 @@ const Messages = () => {
       setDraft("");
     } catch (err) {
       console.error("Error sending message:", err);
-      setError(err.message || "Failed to send message");
+      const msg = err.message || "Failed to send message";
+      setError(msg);
+      toast.error(msg);
     } finally {
       setSending(false);
     }
   };
 
   const partnerName = partner?.full_name || "Conversation";
+  usePageTitle(partner?.full_name ? `Chat · ${partner.full_name}` : "Chat");
 
   return (
     <div className="matches-page">

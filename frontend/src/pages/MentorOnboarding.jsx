@@ -3,13 +3,19 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { mentorAPI, interestsAPI } from "../lib/api";
 import { useAuth } from "../contexts/AuthContext";
+import { useToast } from "../contexts/ToastContext";
+import { usePageTitle } from "../lib/usePageTitle";
 import ImageUpload from "../components/ImageUpload";
 import "../App.css";
 import logo from "../assets/logo.png";
 
+const JOB_TITLE_MAX = 80;
+
 const MentorOnboarding = () => {
+  usePageTitle("Mentor onboarding");
   const navigate = useNavigate();
   const { refreshProfile } = useAuth();
+  const toast = useToast();
   const [availableInterests, setAvailableInterests] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -73,24 +79,56 @@ const MentorOnboarding = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setLoading(true);
     setError(null);
 
+    const jobTitle = formData.job_title.trim();
+    const industry = formData.industry.trim();
+
+    if (!industry) {
+      setError("Please choose an industry.");
+      return;
+    }
+    if (jobTitle.length < 2) {
+      setError("Please enter a real job title (at least 2 characters).");
+      return;
+    }
+    if (jobTitle.length > JOB_TITLE_MAX) {
+      setError(`Job title is too long (max ${JOB_TITLE_MAX} characters).`);
+      return;
+    }
+    if (formData.help_types_offered.length === 0) {
+      setError("Pick at least one type of help you can offer.");
+      return;
+    }
+    if (formData.interest_ids.length < 3) {
+      setError("Select at least 3 interests so we can match you well.");
+      return;
+    }
+    if (
+      formData.max_requests_per_week < 1 ||
+      formData.max_requests_per_week > 20
+    ) {
+      setError("Max requests per week should be between 1 and 20.");
+      return;
+    }
+
+    setLoading(true);
     try {
-      // Create mentor profile in backend
       await mentorAPI.createMe({
         ...formData,
+        job_title: jobTitle,
+        industry,
         is_active: true,
       });
 
-      // Refresh profile in auth context
       await refreshProfile();
-
-      // Navigate to app home
+      toast.success("Mentor profile created");
       navigate("/app/home");
     } catch (err) {
       console.error("Error creating mentor profile:", err);
-      setError(err.message || "Failed to create mentor profile");
+      const msg = err.message || "Failed to create mentor profile";
+      setError(msg);
+      toast.error(msg);
       setLoading(false);
     }
   };

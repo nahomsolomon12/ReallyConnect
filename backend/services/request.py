@@ -1,7 +1,7 @@
 from uuid import UUID
 from typing import List
 from fastapi import HTTPException, status
-from datetime import datetime
+from datetime import datetime, timezone
 
 from services.database import supabase
 from models.request import MentorshipRequest
@@ -202,7 +202,7 @@ class RequestService:
             # Update request status
             update_dict = {
                 "status": "accepted",
-                "responded_at": datetime.utcnow().isoformat()
+                "responded_at": datetime.now(timezone.utc).isoformat()
             }
             
             updated_result = supabase.table("mentorship_requests").update(update_dict).eq("id", str(request_id)).execute()
@@ -281,7 +281,7 @@ class RequestService:
             # Update request status
             update_dict = {
                 "status": "declined",
-                "responded_at": datetime.utcnow().isoformat()
+                "responded_at": datetime.now(timezone.utc).isoformat()
             }
             
             updated_result = supabase.table("mentorship_requests").update(update_dict).eq("id", str(request_id)).execute()

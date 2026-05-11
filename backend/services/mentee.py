@@ -1,7 +1,7 @@
 from uuid import UUID
 from typing import List, Optional
 from fastapi import HTTPException, status
-from datetime import datetime
+from datetime import datetime, timezone
 
 from services.database import supabase
 from services.interest import InterestService
@@ -176,7 +176,7 @@ class MenteeService:
                 update_dict["profile_picture_url"] = update_data.profile_picture_url
             
             if update_dict:
-                update_dict["updated_at"] = datetime.utcnow().isoformat()
+                update_dict["updated_at"] = datetime.now(timezone.utc).isoformat()
                 supabase.table("mentee_profiles").update(update_dict).eq("id", str(mentee_id)).execute()
             
             # Update interests if provided

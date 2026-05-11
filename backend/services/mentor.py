@@ -1,7 +1,7 @@
 from uuid import UUID
 from typing import List, Optional
 from fastapi import HTTPException, status
-from datetime import datetime
+from datetime import datetime, timezone
 
 from services.database import supabase
 from services.interest import InterestService
@@ -182,7 +182,7 @@ class MentorService:
                 update_dict["is_active"] = update_data.is_active
             
             if update_dict:
-                update_dict["updated_at"] = datetime.utcnow().isoformat()
+                update_dict["updated_at"] = datetime.now(timezone.utc).isoformat()
                 supabase.table("mentor_profiles").update(update_dict).eq("id", str(mentor_id)).execute()
             
             # Update interests if provided

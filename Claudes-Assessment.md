@@ -174,85 +174,85 @@ The items below represent everything needed to make ReallyConnect functional, st
 ### PHASE 1 — Make the App Actually Work (Blockers)
 
 #### Authentication
-- [ ] Implement real Supabase Auth in the frontend (email/password or LinkedIn OAuth via Supabase)
-- [ ] Store the Supabase session token (`access_token`) in memory or `sessionStorage` after login
-- [ ] Pass `Authorization: Bearer <token>` header on every API call
-- [ ] Create a `useAuth` hook or context that exposes the current user and session
-- [ ] Add route guards — redirect unauthenticated users from `/app/*` routes to `/signin`
-- [ ] Add redirect from `/signin` and `/signup` to `/app/home` if already logged in
-- [ ] Wire the "Sign Out" button in `Profile.jsx` to `supabase.auth.signOut()` and clear session state
+- [x] Implement real Supabase Auth in the frontend (email/password or LinkedIn OAuth via Supabase)
+- [x] Store the Supabase session token (`access_token`) in memory or `sessionStorage` after login
+- [x] Pass `Authorization: Bearer <token>` header on every API call
+- [x] Create a `useAuth` hook or context that exposes the current user and session
+- [x] Add route guards — redirect unauthenticated users from `/app/*` routes to `/signin`
+- [x] Add redirect from `/signin` and `/signup` to `/app/home` if already logged in
+- [x] Wire the "Sign Out" button in `Profile.jsx` to `supabase.auth.signOut()` and clear session state
 
 #### API Integration — Onboarding
-- [ ] After mentor onboarding form submit, call `POST /api/mentors/me` with the form data
-- [ ] After mentee onboarding form submit, call `POST /api/mentees/me` with the form data
-- [ ] Map onboarding form fields to the correct API schema fields (expertise → `job_title`, adviceArea → `help_types_offered`, etc.)
-- [ ] Add interest selection UI to both onboarding forms (multi-select from `GET /api/interests`)
-- [ ] Add `max_requests_per_week` field to mentor onboarding
-- [ ] After onboarding API call succeeds, then navigate to `/app/home` (not before)
-- [ ] Handle API errors in onboarding forms with user-visible error messages
+- [x] After mentor onboarding form submit, call `POST /api/mentors/me` with the form data
+- [x] After mentee onboarding form submit, call `POST /api/mentees/me` with the form data
+- [x] Map onboarding form fields to the correct API schema fields (expertise → `job_title`, adviceArea → `help_types_offered`, etc.)
+- [x] Add interest selection UI to both onboarding forms (multi-select from `GET /api/interests`)
+- [x] Add `max_requests_per_week` field to mentor onboarding
+- [x] After onboarding API call succeeds, then navigate to `/app/home` (not before)
+- [x] Handle API errors in onboarding forms with user-visible error messages
 
 #### API Integration — Discover Feed (AppHome)
-- [ ] Replace the `mockProfiles` array in `AppHome.jsx` with a call to `GET /api/recommendations`
-- [ ] Render the real `MentorProfileResponse` data in the `ProfileCard` component (name, job_title, industry, interests)
-- [ ] Implement the "like" button to trigger a request modal or navigate to a request-compose screen
-- [ ] Implement the "dislike" button to skip to the next mentor profile (advance the feed index)
-- [ ] Show a loading state (skeleton card) while the API call is in flight
-- [ ] Show an empty state ("No more mentors to browse") when the feed is exhausted
-- [ ] Add basic pagination — fetch the next batch when the current batch runs out
+- [x] Replace the `mockProfiles` array in `AppHome.jsx` with a call to `GET /api/recommendations`
+- [x] Render the real `MentorProfileResponse` data in the `ProfileCard` component (name, job_title, industry, interests)
+- [x] Implement the "like" button to trigger a request modal or navigate to a request-compose screen
+- [x] Implement the "dislike" button to skip to the next mentor profile (advance the feed index)
+- [x] Show a loading state (skeleton card) while the API call is in flight
+- [x] Show an empty state ("No more mentors to browse") when the feed is exhausted
+- [x] Add basic pagination — fetch the next batch when the current batch runs out
 
 #### API Integration — Matches Page
-- [ ] Replace hardcoded James Wright / Sarah Nguyen with a call to `GET /api/requests?status=accepted` or a connections endpoint
-- [ ] Remove the broken `import profile from "../assets/JamesWright.jpg"` and `sarah.jpg` imports
-- [ ] Render real matched mentor names, job titles, and profile avatars (or initials fallback)
-- [ ] Each match card should link to the Messages page with that specific user's ID in the route (e.g., `/app/matches/messages/:userId`)
+- [x] Replace hardcoded James Wright / Sarah Nguyen with a call to `GET /api/requests?status=accepted` or a connections endpoint
+- [x] Remove the broken `import profile from "../assets/JamesWright.jpg"` and `sarah.jpg` imports
+- [x] Render real matched mentor names, job titles, and profile avatars (or initials fallback)
+- [x] Each match card should link to the Messages page with that specific user's ID in the route (e.g., `/app/matches/messages/:userId`)
 
 #### API Integration — Messages Page
-- [ ] Update the route to `/app/matches/messages/:userId` and read `userId` from route params
-- [ ] Implement real message send via a backend messaging endpoint (or Supabase Realtime)
-- [ ] Load and display message history between the two users
-- [ ] Show real user name from the matched connection, not the hardcoded `"James Wright"`
-- [ ] Implement the Send button to actually submit the message
+- [x] Update the route to `/app/matches/messages/:userId` and read `userId` from route params
+- [x] Implement real message send via a backend messaging endpoint (or Supabase Realtime)
+- [x] Load and display message history between the two users
+- [x] Show real user name from the matched connection, not the hardcoded `"James Wright"`
+- [x] Implement the Send button to actually submit the message
 
 #### API Integration — Profile Page
-- [ ] Replace all `localStorage.getItem("profile")` with a call to `GET /api/users/me`
-- [ ] Replace `localStorage.setItem("profile")` on save with a call to `PUT /api/users/me`
-- [ ] Remove the browser `alert()` from the delete handler — use inline UI feedback
-- [ ] Remove `handleDelete` or replace with a proper account deactivation flow
+- [x] Replace all `localStorage.getItem("profile")` with a call to `GET /api/users/me`
+- [x] Replace `localStorage.setItem("profile")` on save with a call to `PUT /api/users/me`
+- [x] Remove the browser `alert()` from the delete handler — use inline UI feedback
+- [x] Remove `handleDelete` or replace with a proper account deactivation flow
 
 ---
 
 ### PHASE 2 — Fix Bugs That Cause Crashes or Broken UI
 
-- [ ] Fix the broken image imports in `Matches.jsx` — add real assets or remove the static mocks entirely
-- [ ] Fix `image: { sarah }` in `AppHome.jsx` mock data — it should be `image: sarah` (the imported module, not an object wrapper)
-- [ ] Fix `border-radius: 80%` on like/dislike buttons to `50%` (circle) or `8px` (rounded rect)
-- [ ] Fix the hardcoded pixel positioning of like/dislike buttons — use flexbox or CSS Grid relative to the card container
-- [ ] Fix the `:Send a message...` typo in `Messages.jsx` — remove the leading colon
-- [ ] Fix the `DiscoveryService` syntax error (misplaced comment inside class body)
-- [ ] Fix `datetime.utcnow()` deprecation warnings in `request.py` and `mentor.py` — replace with `datetime.now(timezone.utc)`
-- [ ] Remove the unused `Breadcrumb` import from `MobileNav.jsx`
+- [x] Fix the broken image imports in `Matches.jsx` — add real assets or remove the static mocks entirely
+- [x] Fix `image: { sarah }` in `AppHome.jsx` mock data — it should be `image: sarah` (the imported module, not an object wrapper)
+- [x] Fix `border-radius: 80%` on like/dislike buttons to `50%` (circle) or `8px` (rounded rect)
+- [x] Fix the hardcoded pixel positioning of like/dislike buttons — use flexbox or CSS Grid relative to the card container
+- [x] Fix the `:Send a message...` typo in `Messages.jsx` — remove the leading colon
+- [x] Fix the `DiscoveryService` syntax error (misplaced comment inside class body)
+- [x] Fix `datetime.utcnow()` deprecation warnings in `request.py` and `mentor.py` — replace with `datetime.now(timezone.utc)`
+- [x] Remove the unused `Breadcrumb` import from `MobileNav.jsx`
 
 ---
 
 ### PHASE 3 — Core UX & Flows That Must Exist for MVP
 
 #### Request Workflow (The Core Feature)
-- [ ] Build a "Send Request" modal or page triggered by swiping right / clicking like
-- [ ] The request form must collect: `help_type` (dropdown from `HelpType` enum), `context` (textarea), `key_questions` (optional list)
-- [ ] Wire the form to `POST /api/requests`
+- [x] Build a "Send Request" modal or page triggered by swiping right / clicking like
+- [x] The request form must collect: `help_type` (dropdown from `HelpType` enum), `context` (textarea), `key_questions` (optional list)
+- [x] Wire the form to `POST /api/requests`
 - [ ] Add the AI rewrite button that calls `POST /api/ai/rewrite-request` (once AI is implemented)
-- [ ] Show confirmation and return to the feed after successful request submission
+- [x] Show confirmation and return to the feed after successful request submission
 
 #### Mentor Request Inbox
-- [ ] Build a request inbox view for mentors (currently no frontend page exists for this)
-- [ ] Call `GET /api/requests` and render pending requests with mentee name, help type, context, and questions
-- [ ] Add Accept and Decline buttons wired to `PATCH /api/requests/{id}/accept` and `/decline`
-- [ ] Show timestamp and help type badge on each request
+- [x] Build a request inbox view for mentors (currently no frontend page exists for this)
+- [x] Call `GET /api/requests` and render pending requests with mentee name, help type, context, and questions
+- [x] Add Accept and Decline buttons wired to `PATCH /api/requests/{id}/accept` and `/decline`
+- [x] Show timestamp and help type badge on each request
 
 #### Landing Page Content
-- [ ] Add hero section with headline, subheadline, and a clear call-to-action ("Get Started" → `/signup`)
-- [ ] Add a brief description of how it works (3-step explainer: Browse → Request → Connect)
-- [ ] Add social proof or purpose copy (ColorStack community context)
+- [x] Add hero section with headline, subheadline, and a clear call-to-action ("Get Started" → `/signup`)
+- [x] Add a brief description of how it works (3-step explainer: Browse → Request → Connect)
+- [x] Add social proof or purpose copy (ColorStack community context)
 
 ---
 
@@ -285,27 +285,27 @@ The items below represent everything needed to make ReallyConnect functional, st
 - [ ] Add frontend-side caching for interests list (it never changes — fetch once, store in state)
 
 #### Frontend Robustness
-- [ ] Add a top-level React error boundary to prevent white-screen crashes
-- [ ] Add loading states (spinner or skeleton) for every page that fetches data
-- [ ] Add empty states for: no matches, no messages, empty feed
-- [ ] Add error toast/banner for failed API calls with a retry option
-- [ ] Validate onboarding form inputs beyond just `required` (min length, max length, disallow whitespace-only)
+- [x] Add a top-level React error boundary to prevent white-screen crashes
+- [x] Add loading states (spinner or skeleton) for every page that fetches data
+- [x] Add empty states for: no matches, no messages, empty feed
+- [x] Add error toast/banner for failed API calls with a retry option
+- [x] Validate onboarding form inputs beyond just `required` (min length, max length, disallow whitespace-only)
 
 #### Messaging Infrastructure
-- [ ] Decide on and implement a messaging backend: Supabase Realtime (recommended) or a messages table with polling
-- [ ] Create the `messages` database table if it doesn't exist (sender_id, recipient_id, content, created_at)
-- [ ] Implement `GET /api/messages/{connection_id}` and `POST /api/messages/{connection_id}`
+- [x] Decide on and implement a messaging backend: Supabase Realtime (recommended) or a messages table with polling
+- [x] Create the `messages` database table if it doesn't exist (sender_id, recipient_id, content, created_at)
+- [x] Implement `GET /api/messages/{connection_id}` and `POST /api/messages/{connection_id}`
 
 ---
 
 ### PHASE 6 — Polish for Launch
 
-- [ ] Add profile photo upload (Supabase Storage) for both mentors and mentees
-- [ ] Add a notification indicator on the Matches nav icon when there are new accepted requests
-- [ ] Add a "Pending" requests tab in Matches for mentees to see sent-but-not-yet-accepted requests
+- [x] Add profile photo upload (Supabase Storage) for both mentors and mentees
+- [x] Add a notification indicator on the Matches nav icon when there are new accepted requests
+- [x] Add a "Pending" requests tab in Matches for mentees to see sent-but-not-yet-accepted requests
 - [ ] Ensure consistent color/font between onboarding pages (gold gradient) and app pages (dark/blue) — currently the design language splits between two themes
-- [ ] Add a `<title>` tag per page (currently all pages share the Vite default title)
-- [ ] Write a proper `.env.example` file documenting all required environment variables
+- [x] Add a `<title>` tag per page (currently all pages share the Vite default title)
+- [x] Write a proper `.env.example` file documenting all required environment variables
 - [ ] Update `README.md` with accurate setup instructions, including that both frontend and backend must be running simultaneously
 - [ ] Remove the `/test-supabase` endpoint from `main.py` before deploying to production
 - [ ] Add a `Demo Video` and `Screenshots` section to `README.md` (both are marked "Coming soon")

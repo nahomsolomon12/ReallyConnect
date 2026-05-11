@@ -1,6 +1,6 @@
 from uuid import UUID
 from fastapi import HTTPException, status
-from datetime import datetime
+from datetime import datetime, timezone
 
 from services.database import supabase
 from models.user import UserProfile
@@ -61,11 +61,11 @@ class UserService:
 
             if check_result.data:
                 # Profile exists, update it
-                update_dict["updated_at"] = datetime.utcnow().isoformat()
+                update_dict["updated_at"] = datetime.now(timezone.utc).isoformat()
                 result = supabase.table("user_profiles").update(update_dict).eq("id", str(user_id)).execute()
             else:
                 # Profile doesn't exist, create it (upsert)
-                now = datetime.utcnow().isoformat()
+                now = datetime.now(timezone.utc).isoformat()
                 create_dict = {
                     "id": str(user_id),
                     "full_name": update_data.full_name,

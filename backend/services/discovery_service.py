@@ -130,8 +130,6 @@ class DiscoveryService:
             "total": len(mentor_list)
         }
 
-#This is for when a mentee clicks on a mentor to see their full profile before sending a request.
-
     @staticmethod
     async def get_mentor_detail(
         mentor_id: UUID,
@@ -139,6 +137,9 @@ class DiscoveryService:
     ) -> dict:
         """
         Get full mentor profile with shared interests highlighted.
+
+        Called when a mentee clicks on a mentor to see their full profile
+        before sending a request.
 
         Args:
             mentor_id: UUID of the mentor to view

@@ -2,8 +2,10 @@ import { useState } from "react";
 import Breadcrumb from "../components/BreadCrumb";
 import "../App.css";
 import { useAuth } from "../contexts/AuthContext";
+import { usePageTitle } from "../lib/usePageTitle";
 
 const SignIn = () => {
+  usePageTitle("Sign in");
   const { signInWithEmail, signUpWithEmail, signInWithOAuth } = useAuth();
   const [isSignUp, setIsSignUp] = useState(false);
   const [email, setEmail] = useState("");
